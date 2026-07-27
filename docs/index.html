@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UnitV QR Scanner — Demos</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      line-height: 1.5;
+    }
+    main { max-width: 900px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; }
+    p.lead { color: #8b949e; margin: 0 0 32px; }
+    section { margin-bottom: 40px; }
+    h2 { font-size: 1.15rem; margin: 0 0 12px; }
+    .player {
+      background: #000;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    video { display: block; width: 100%; height: auto; background: #000; }
+    a.back { color: #2f81f7; text-decoration: none; }
+    a.back:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a class="back" href="https://github.com/adilzahoor2812/unitv-qr-scanner">← Back to GitHub repo</a></p>
+    <h1>UnitV K210 QR Scanner — Demo Videos</h1>
+    <p class="lead">Tap the play button in the center of each video.</p>
+
+    <section>
+      <h2>1. QR Scanner Demo</h2>
+      <div class="player">
+        <video controls playsinline preload="metadata" poster="qr-scanner.mp4.png">
+          <source src="https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/qr-scanner.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Serial Monitor Demo</h2>
+      <div class="player">
+        <video controls playsinline preload="metadata" poster="serial-monitor.mp4.png">
+          <source src="https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/serial-monitor.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
