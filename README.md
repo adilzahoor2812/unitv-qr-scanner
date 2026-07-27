@@ -10,16 +10,20 @@ Scans QR codes on-device, validates with a multi-frame stability lock, and logs 
 ### 1. QR Scanner Demo
 Live QR detection on UnitV K210 (MaixPy IDE preview)
 
-<video controls width="100%" playsinline preload="metadata">
-  <source src="https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/qr-scanner.mp4" type="video/mp4">
-</video>
+[![QR Scanner Demo](docs/qr-scanner.mp4.png)](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/qr-scanner.mp4)
+
+**[▶ Click here to play QR Scanner Demo](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/qr-scanner.mp4)**
+
+---
 
 ### 2. Serial Monitor Demo
 Decoded QR payload printed on the serial console
 
-<video controls width="100%" playsinline preload="metadata">
-  <source src="https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/serial-monitor.mp4" type="video/mp4">
-</video>
+[![Serial Monitor Demo](docs/serial-monitor.mp4.png)](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/serial-monitor.mp4)
+
+**[▶ Click here to play Serial Monitor Demo](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/serial-monitor.mp4)**
+
+---
 
 **What you will see**
 - Live camera preview in MaixPy IDE
@@ -60,8 +64,9 @@ Decoded QR payload printed on the serial console
 unitv-qr-scanner/
 ├── README.md
 ├── main.py                 # QR scanner + flash logging
-├── qr-scanner.mp4          # demo (plays in README)
-└── serial-monitor.mp4      # serial demo (plays in README)
+├── qr-scanner.mp4          # demo video
+├── serial-monitor.mp4      # serial demo
+└── docs/                   # preview images for README
 ```
 
 ---
