@@ -7,21 +7,23 @@ Scans QR codes on-device, validates with a multi-frame stability lock, and logs 
 
 ## Demo
 
-Click **play** below to watch the demos (works on the GitHub page).
+Click **Play** below.
 
 ### QR Scanner
 
-<video src="qr-scanner.mp4" controls width="100%" preload="metadata">
-  Your browser does not support HTML video.
-  <a href="qr-scanner.mp4">Download QR Scanner demo</a>
+<video controls width="100%" playsinline preload="metadata">
+  <source src="https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/qr-scanner.mp4" type="video/mp4">
 </video>
+
+[▶ If player is blank, open the QR demo here](https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/qr-scanner.mp4)
 
 ### Serial Monitor
 
-<video src="serial-monitor.mp4" controls width="100%" preload="metadata">
-  Your browser does not support HTML video.
-  <a href="serial-monitor.mp4">Download Serial Monitor demo</a>
+<video controls width="100%" playsinline preload="metadata">
+  <source src="https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/serial-monitor.mp4" type="video/mp4">
 </video>
+
+[▶ If player is blank, open the Serial demo here](https://cdn.jsdelivr.net/gh/adilzahoor2812/unitv-qr-scanner@main/serial-monitor.mp4)
 
 What the demos show:
 - Live camera preview in MaixPy IDE
