@@ -1,7 +1,15 @@
 """
-UnitV K210 — Offline QR Scanner with flash logging
-Hardware: M5Stack UnitV K210 AI Camera M12 (OV7740)
-Runtime: MaixPy (MicroPython)
+Edge QR Check-in & Inventory Node
+---------------------------------
+Hardware : M5Stack UnitV K210 AI Camera M12 (OV7740)
+Runtime  : MaixPy (MicroPython on Kendryte K210)
+
+Behavior
+  - Decode QR codes on-device
+  - Accept only after multi-frame stability lock
+  - Reject tiny / unreliable detections
+  - Suppress duplicates with cooldown
+  - Append audit events to /flash/scans.txt
 """
 
 import sensor
@@ -9,33 +17,36 @@ import image
 import time
 import gc
 
+# ---------------- camera bring-up ----------------
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
-sensor.set_framesize(sensor.QVGA)  # 320x240 — avoid windowing (distorts OV7740)
+sensor.set_framesize(sensor.QVGA)  # 320x240; avoid windowing (OV7740 distortion)
 sensor.set_auto_gain(True)
 sensor.set_auto_whitebal(True)
 sensor.skip_frames(time=1000)
 sensor.run(1)
 
-LOG = "/flash/scans.txt"
+# ---------------- scanner config ----------------
+LOG_PATH = "/flash/scans.txt"
+NEED_STABLE = 2       # consecutive identical payloads required
+COOLDOWN_MS = 2000    # ignore same code briefly after a successful log
+MIN_SIZE = 70         # minimum QR width in pixels
+
 last_data = ""
 last_time = 0
 stable = 0
 
-NEED_STABLE = 2      # same payload required this many frames
-COOLDOWN_MS = 2000   # ignore same code for 2 seconds after log
-MIN_SIZE = 70        # reject tiny / unreliable detections
 
-
-def log_scan(data):
-    line = "%d,%s\n" % (time.ticks_ms(), data)
-    with open(LOG, "a") as f:
+def log_scan(payload):
+    """Persist one accepted scan to flash and print confirmation."""
+    line = "%d,%s\n" % (time.ticks_ms(), payload)
+    with open(LOG_PATH, "a") as f:
         f.write(line)
-    print("SCAN OK:", data)
+    print("SCAN OK:", payload)
 
 
 print("QR scanner ready")
-print("Hold QR steady, large in frame, good light")
+print("Hold code steady, large in frame, good light")
 
 while True:
     gc.collect()
@@ -47,6 +58,7 @@ while True:
         time.sleep_ms(20)
         continue
 
+    # Prefer the largest detection in frame (most reliable)
     q = max(codes, key=lambda c: c.w() * c.h())
     data = q.payload()
 
