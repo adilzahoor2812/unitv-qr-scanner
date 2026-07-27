@@ -7,8 +7,21 @@ Scans QR codes on-device, validates with a multi-frame stability lock, and logs 
 
 ## Demo
 
-- [QR Scanner demo](./QR%20Scanner.mov)
-- [Serial Monitor demo](./Serial%20Monitor.mov)
+Click **play** below to watch the demos (works on the GitHub page).
+
+### QR Scanner
+
+<video src="qr-scanner.mp4" controls width="100%" preload="metadata">
+  Your browser does not support HTML video.
+  <a href="qr-scanner.mp4">Download QR Scanner demo</a>
+</video>
+
+### Serial Monitor
+
+<video src="serial-monitor.mp4" controls width="100%" preload="metadata">
+  Your browser does not support HTML video.
+  <a href="serial-monitor.mp4">Download Serial Monitor demo</a>
+</video>
 
 What the demos show:
 - Live camera preview in MaixPy IDE
@@ -49,8 +62,8 @@ What the demos show:
 unitv-qr-scanner/
 ├── README.md
 ├── main.py                 # QR scanner + flash logging
-├── QR Scanner.mov          # demo video
-└── Serial Monitor.mov      # serial output demo
+├── qr-scanner.mp4          # demo (plays in README)
+└── serial-monitor.mp4      # serial demo (plays in README)
 ```
 
 ---
