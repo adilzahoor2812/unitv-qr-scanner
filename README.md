@@ -10,18 +10,18 @@ Scans QR codes on-device, validates with a multi-frame stability lock, and logs 
 ### 1. QR Scanner Demo
 Live QR detection on UnitV K210 (MaixPy IDE preview)
 
-[![QR Scanner Demo](docs/qr-scanner.mp4.png)](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/qr-scanner.mp4)
+[![QR Scanner Demo](docs/qr-scanner.mp4.png)](https://github.com/adilzahoor2812/unitv-qr-scanner/blob/main/qr-scanner.mp4)
 
-**[▶ Click here to play QR Scanner Demo](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/qr-scanner.mp4)**
+**[▶ Play QR Scanner Demo](https://github.com/adilzahoor2812/unitv-qr-scanner/blob/main/qr-scanner.mp4)**
 
 ---
 
 ### 2. Serial Monitor Demo
 Decoded QR payload printed on the serial console
 
-[![Serial Monitor Demo](docs/serial-monitor.mp4.png)](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/serial-monitor.mp4)
+[![Serial Monitor Demo](docs/serial-monitor.mp4.png)](https://github.com/adilzahoor2812/unitv-qr-scanner/blob/main/serial-monitor.mp4)
 
-**[▶ Click here to play Serial Monitor Demo](https://github.com/adilzahoor2812/unitv-qr-scanner/raw/main/serial-monitor.mp4)**
+**[▶ Play Serial Monitor Demo](https://github.com/adilzahoor2812/unitv-qr-scanner/blob/main/serial-monitor.mp4)**
 
 ---
 
