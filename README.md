@@ -1,124 +1,142 @@
-# Offline QR Scanning Node for M5Stack UnitV K210
+# Edge QR Check-in & Inventory Node
+### M5Stack UnitV K210 · MaixPy · On-device computer vision
 
-An on-device QR scanning application for the **M5Stack UnitV K210** (OV7740, M12).  
-The system captures frames, decodes QR payloads, applies validation logic, and writes an offline audit log to internal flash — without cloud services or network connectivity.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Hardware](https://img.shields.io/badge/Hardware-UnitV%20K210-orange.svg)](https://docs.m5stack.com/en/unit/UNIT-V%20M12)
+[![Runtime](https://img.shields.io/badge/Runtime-MaixPy-green.svg)](https://wiki.sipeed.com/soft/maixpy/en/)
+[![Demo](https://img.shields.io/badge/Demo-Live%20Player-purple.svg)](https://adilzahoor2812.github.io/unitv-qr-scanner/)
 
-[Demo videos](https://adilzahoor2812.github.io/unitv-qr-scanner/) · [Source (`main.py`)](main.py) · [License](LICENSE)
+Offline QR scanning on a **13 g edge-AI camera** — no cloud, no Wi‑Fi, no phone required.  
+Built for **inventory tagging**, **lab/student check-in demos**, and **embedded vision portfolios**.
 
----
-
-## Overview
-
-This project treats the UnitV as a compact **edge vision node** rather than a host-dependent accessory. After firmware setup, the same script can run in MaixPy IDE for development or boot automatically from flash for standalone deployment on USB power.
-
-**Primary use cases**
-- Inventory / asset tagging demos
-- Offline check-in prototypes (lab, workshop, events)
-- Embedded computer-vision coursework and portfolio work
+**Live demos:** [Open demo player](https://adilzahoor2812.github.io/unitv-qr-scanner/)
 
 ---
 
-## Features
+## Why this project
 
-| Capability | Implementation |
-|---|---|
-| On-device QR decode | MaixPy `image.find_qrcodes()` |
-| False-accept reduction | Multi-frame stability lock |
-| Range robustness | Minimum bounding-box size filter |
-| Duplicate suppression | Time-based cooldown |
-| Persistence | Append-only log at `/flash/scans.txt` |
-| Standalone operation | Deploy as `/flash/main.py` |
+Most QR demos are phone apps or cloud APIs. This project runs **entirely on-device** on the Kendryte K210:
+
+- Capture → decode → validate → log
+- Works with USB power alone after `main.py` is installed
+- Designed around real embedded constraints (QVGA, limited RAM, no OS)
+
+That is the skill set recruiters look for in **embedded**, **edge AI**, and **sensor/verification** roles.
 
 ---
 
-## Demonstrations
+## Demo
 
-| Demo | Description |
-|---|---|
-| [QR Scanner](https://adilzahoor2812.github.io/unitv-qr-scanner/) | Live detection with bounding box and payload overlay |
-| [Serial output](https://adilzahoor2812.github.io/unitv-qr-scanner/) | Accepted scans printed to the host console |
+### 1. QR Scanner Demo
+Live detection in MaixPy IDE (bounding box + payload)
 
 [![QR Scanner Demo](docs/qr-scanner.mp4.png)](https://adilzahoor2812.github.io/unitv-qr-scanner/)
+
+### 2. Serial Monitor Demo
+Decoded payload streamed to the host console / audit log
+
 [![Serial Monitor Demo](docs/serial-monitor.mp4.png)](https://adilzahoor2812.github.io/unitv-qr-scanner/)
 
 ---
 
-## Architecture
+## System architecture
 
 ```text
-OV7740 capture
-      │
-      ▼
-QR decode (largest detection)
-      │
-      ├─ size filter ──────────────► reject (too small / far)
-      ├─ stability lock (N frames) ► reject (unstable)
-      └─ cooldown check ───────────► suppress duplicate
-      │
-      ▼
-Append event → /flash/scans.txt
-Print confirmation on UART/USB console
+┌─────────────────────────────────────────────┐
+│              UnitV K210 (OV7740)             │
+│  camera → find_qrcodes() → stability lock   │
+│           → size filter → cooldown          │
+│           → append /flash/scans.txt         │
+└─────────────────────────────────────────────┘
+        USB-C (dev)              USB power (deploy)
+             │                          │
+        MaixPy IDE                 standalone boot
+        live preview               auto-run main.py
 ```
 
-**Development path:** USB-C ↔ MaixPy IDE (preview + serial)  
-**Deployment path:** USB power only → auto-run `main.py`
+---
+
+## Reliability design (not just a toy loop)
+
+| Mechanism | Purpose |
+|-----------|---------|
+| **Multi-frame stability lock** | Same payload must appear on consecutive frames before accept |
+| **Minimum size filter** | Rejects far/tiny codes that decode poorly on QVGA |
+| **Cooldown** | Prevents duplicate spam while the code stays in view |
+| **Flash audit log** | Persistent offline trail without microSD dependency |
+| **No aggressive windowing** | Avoids OV7740 preview distortion that breaks decode |
 
 ---
 
-## Technical stack
+## Hardware
 
-| Layer | Details |
-|---|---|
-| Hardware | [UnitV K210 M12](https://docs.m5stack.com/en/unit/UNIT-V%20M12), OV7740 sensor |
-| Compute | Kendryte K210 (dual-core RISC-V) |
-| Firmware / runtime | MaixPy (MicroPython) |
-| Host tools | Kflash_GUI, MaixPy IDE (macOS) |
-| Resolution | QVGA (320×240) |
+| Item | Detail |
+|------|--------|
+| Device | [M5Stack UnitV K210 M12](https://docs.m5stack.com/en/unit/UNIT-V%20M12) (OV7740) |
+| SoC | Kendryte K210 (RISC-V dual-core + KPU) |
+| Optics | M12 wide lens (~80° FOV) |
+| I/O | USB-C, Grove UART, 2 buttons, microSD slot |
+| Dev host | macOS + MaixPy IDE + Kflash_GUI |
 
 ---
 
-## Getting started
+## Skills demonstrated
 
-### Requirements
-- M5Stack UnitV K210 (OV7740)
-- USB-C data cable
-- MaixPy-compatible firmware for StickV/UnitV (full build recommended)
-- MaixPy IDE
+- Embedded MicroPython (MaixPy) on constrained MCU-class hardware  
+- On-device computer vision / barcode-style decoding  
+- Defensive event logic (debounce, cooldown, persistence)  
+- Hardware bring-up (firmware flash, serial workflow, OV7740 tuning)  
+- Technical documentation for reproducible demos  
 
-### 1. Flash firmware
-1. Connect the UnitV over USB-C.
-2. In **Kflash_GUI**, select board **M5StickV**.
-3. Flash a full MaixPy StickV/UnitV image.
-4. Power-cycle the device.
+---
 
-> Note: Minimal MaixPy builds may omit OpenMV QR APIs such as `find_qrcodes()`.
+## Repository layout
 
-### 2. Run the application
-1. Open MaixPy IDE → **Tools → Select Board → M5StickV**.
-2. Connect to the serial port.
-3. Open [`main.py`](main.py) and run it.
-4. Present a high-contrast QR code at close range under stable lighting.
+```text
+unitv-qr-scanner/
+├── README.md
+├── LICENSE
+├── main.py                 # production scanner script
+├── qr-scanner.mp4          # demo clip
+├── serial-monitor.mp4
+└── docs/
+    ├── index.html          # demo player (GitHub Pages)
+    ├── qr-scanner.mp4.png
+    └── serial-monitor.mp4.png
+```
 
-### 3. Read the audit log
+---
+
+## Quick start
+
+### 1. Flash MaixPy firmware
+1. Connect UnitV via USB-C  
+2. Open **Kflash_GUI** → board **M5StickV**  
+3. Burn StickV/UnitV MaixPy firmware (full build recommended for QR APIs)  
+4. Unplug / replug  
+
+> Minimum MaixPy builds may strip OpenMV QR functions (`find_qrcodes`). Prefer full StickV firmware for this project.
+
+### 2. Run in MaixPy IDE
+1. **Tools → Select Board → M5StickV**  
+2. Connect to the serial port (`cu.usbserial-...`)  
+3. Open `main.py` → **Run**  
+4. Present a sharp QR (good light, hold steady, fill a large part of the frame)  
+
+### 3. Inspect the audit log
 
 ```python
 print(open("/flash/scans.txt").read())
 ```
 
-### 4. Standalone deployment
-Upload/save the script as `/flash/main.py` so scanning starts automatically on power-up.
+### 4. Deploy standalone
+Save/upload as `/flash/main.py` so the node auto-starts on USB power.
 
 ---
 
-## Log format
+## Example log format
 
-Each accepted scan is stored as:
-
-```text
-<timestamp_ms>,<payload>
-```
-
-Example:
+`/flash/scans.txt`
 
 ```text
 123456,HELLO-UNITV
@@ -126,39 +144,36 @@ Example:
 135440,TOOL-17
 ```
 
-The payload is the exact QR content (identifier, URL, or custom string).
+`timestamp_ms,payload`
+
+Payload text is **exact** QR content (IDs, URLs, or structured strings you encode).
 
 ---
 
-## Design constraints
+## Applications
 
-| Constraint | Impact on design |
-|---|---|
-| QVGA + wide FOV | Codes must be relatively large in-frame |
-| Limited on-device resources | Lightweight classical decode, not cloud OCR |
-| No onboard Wi-Fi | Logging remains local unless a host bridge is added |
-| Variable microSD compatibility | Default persistence uses internal flash |
+- Workshop / lab **inventory** labeling  
+- Offline **check-in** prototype (student / staff / visitor)  
+- Event badge scanning without network dependency  
+- Teaching edge vision + embedded logging  
 
 ---
 
-## Repository structure
+## Limitations (honest)
 
-```text
-├── main.py                 # Scanner application
-├── LICENSE                 # MIT
-├── qr-scanner.mp4          # Demo asset
-├── serial-monitor.mp4
-└── docs/                   # GitHub Pages demo player + posters
-```
+- Not as fast as a modern smartphone scanner  
+- QVGA + wide lens → QR must be relatively close and sharp  
+- UnitV has no Wi‑Fi — phone/cloud alerts need a later host (ESP32/Pi)  
+- Some microSD cards are unreliable on UnitV; this design logs to flash by default  
 
 ---
 
-## Future work
+## Roadmap
 
-- Mode switch (inventory vs check-in) via onboard buttons  
-- UART JSON stream to ESP32/STM32 for networked gateways  
-- AprilTag support for robotics alignment tasks  
-- Optional TinyML classifier for scene context alongside QR  
+- [ ] Button modes: inventory vs check-in  
+- [ ] UART JSON output to ESP32 → web / Telegram gateway  
+- [ ] AprilTag mode for robotics targets  
+- [ ] Optional TinyML class head for hybrid QR + object context  
 
 ---
 
@@ -166,13 +181,12 @@ The payload is the exact QR content (identifier, URL, or custom string).
 
 **Adil Zahoor**  
 M.Sc. Artificial Intelligence — Berlin  
-Embedded systems · edge perception · sensor verification  
+Focus: embedded systems, edge perception, sensor verification  
 
-- GitHub: [adilzahoor2812](https://github.com/adilzahoor2812)  
-- Project page: [Demo player](https://adilzahoor2812.github.io/unitv-qr-scanner/)
+GitHub: [adilzahoor2812](https://github.com/adilzahoor2812)
 
 ---
 
 ## License
 
-Released under the [MIT License](LICENSE).
+This project is released under the [MIT License](LICENSE).
